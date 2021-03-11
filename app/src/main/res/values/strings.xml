@@ -5,4 +5,5 @@
     <string name="task_name">Task Name</string>
     <string name="important_task">Important Task</string>
     <string name="save_task_button">Save Task Button</string>
+    <string name="add_task_button">Add Task Button</string>
 </resources>
