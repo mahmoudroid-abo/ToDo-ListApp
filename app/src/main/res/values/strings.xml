@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ToDo-List App</string>
+    <string name="tasks_add_button">tasks add button</string>
+    <string name="priority">Priority</string>
+    <string name="task_name">Task Name</string>
+    <string name="important_task">Important Task</string>
+    <string name="save_task_button">Save Task Button</string>
 </resources>
