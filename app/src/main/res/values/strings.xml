@@ -6,4 +6,10 @@
     <string name="important_task">Important Task</string>
     <string name="save_task_button">Save Task Button</string>
     <string name="add_task_button">Add Task Button</string>
+    <string name="search">Search</string>
+    <string name="sort_by_name">Sort By Name</string>
+    <string name="sort">Sort</string>
+    <string name="sort_by_date_created">Sort By Date Created</string>
+    <string name="hide_completed">Hide Completed</string>
+    <string name="delete_all_completed">Delete All Completed</string>
 </resources>
