@@ -29,12 +29,12 @@ abstract class TaskDataBase : RoomDatabase() {
 
             applicationScope.launch {
                 dao.insert(Task("First", important = true))
-                dao.insert(Task("First1"))
-                dao.insert(Task("First2"))
-                dao.insert(Task("First3", completed = true))
-                dao.insert(Task("First4"))
-                dao.insert(Task("First5", completed = false))
-                dao.insert(Task("First6"))
+                dao.insert(Task("Second"))
+                dao.insert(Task("Mahmoud,"))
+                dao.insert(Task("Study", completed = true))
+                dao.insert(Task("Deutsch"))
+                dao.insert(Task("Ali", completed = false))
+                dao.insert(Task("First6", completed = true))
             }
 
         }
