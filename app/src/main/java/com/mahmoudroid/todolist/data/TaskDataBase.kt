@@ -15,7 +15,6 @@ abstract class TaskDataBase : RoomDatabase() {
 
     abstract fun taskDao(): TaskDao
 
-
     class Callback @Inject constructor(
         private val dataBase: Provider<TaskDataBase>,
         @ApplicationScope private val applicationScope: CoroutineScope
@@ -40,7 +39,6 @@ abstract class TaskDataBase : RoomDatabase() {
                 dao.insert(Task("Ali"))
                 dao.insert(Task("First", completed = true))
             }
-
         }
     }
 }
