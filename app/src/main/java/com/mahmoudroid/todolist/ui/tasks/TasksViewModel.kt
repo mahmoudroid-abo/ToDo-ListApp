@@ -8,9 +8,11 @@ import com.mahmoudroid.todolist.data.PreferencesManager
 import com.mahmoudroid.todolist.data.SortOrder
 import com.mahmoudroid.todolist.data.Task
 import com.mahmoudroid.todolist.data.TaskDao
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class TasksViewModel @ViewModelInject constructor(
@@ -22,6 +24,9 @@ class TasksViewModel @ViewModelInject constructor(
 
     val preferencesFlow = preferencesManager.preferencesFlow
 
+    private val taskEventChannel = Channel<TaskEvent>()
+
+    val taskEvent = taskEventChannel.receiveAsFlow()
 
     private val taskFlow = combine(
         searchQuery,
@@ -45,7 +50,22 @@ class TasksViewModel @ViewModelInject constructor(
     fun onTaskSelected(task: Task) {}
     fun onTaskCheckedChanged(task: Task, isChecked: Boolean) = viewModelScope.launch {
         taskDao.update(task.copy(completed = isChecked))
+
     }
 
+    fun onTaskSwiped(task: Task) = viewModelScope.launch {
+        taskDao.delete(task)
+        taskEventChannel.send(TaskEvent.ShowUndoDeleteTaskMessage(task))
+    }
+
+    fun onUndoDeleteClick(task: Task) = viewModelScope.launch {
+        taskDao.insert(task)
+    }
+
+    sealed class TaskEvent {
+        data class ShowUndoDeleteTaskMessage(val task: Task) : TaskEvent() {
+
+        }
+    }
 }
 
