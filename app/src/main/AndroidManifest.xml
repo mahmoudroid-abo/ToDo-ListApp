@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TODOLISTAPP"
         tools:ignore="AllowBackup">
-        <activity android:name="com.mahmoudroid.todolist.ui.MainActivity">
+        <activity
+            android:name="com.mahmoudroid.todolist.ui.MainActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

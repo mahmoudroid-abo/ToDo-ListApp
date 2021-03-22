@@ -3,13 +3,22 @@ package com.mahmoudroid.todolist.ui.addedittask
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.mahmoudroid.todolist.R
 import com.mahmoudroid.todolist.databinding.FragmentAddEditTaskBinding
+import com.mahmoudroid.todolist.util.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
+private const val TAG = "AddEditTaskFragment"
 
 @AndroidEntryPoint
 class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
@@ -26,6 +35,37 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
             checkBoxImportant.jumpDrawablesToCurrentState()
             textViewDateCreated.isVisible = viewModel.task != null
             textViewDateCreated.text = "Created: ${viewModel.task?.createdDateFormatted}"
+
+            editTextTaskName.addTextChangedListener {
+                viewModel.taskName = it.toString()
+            }
+
+            checkBoxImportant.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.taskImportance = isChecked
+            }
+
+            fabSaveTask.setOnClickListener {
+                viewModel.onSaveClick()
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.addEditTaskEvent.collect { event ->
+                when (event) {
+                    is AddEditTaskViewModel.AddEditTaskEvent.ShowInvalidInputMessage -> {
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
+                    }
+                    is AddEditTaskViewModel.AddEditTaskEvent.NavigateBackWithResult -> {
+                        binding.editTextTaskName.clearFocus()
+                        setFragmentResult(
+                            "add_edit_request",
+                            bundleOf("add_edit_result" to event.result)
+                        )
+
+                        findNavController().popBackStack()
+                    }
+                }.exhaustive
+            }
         }
     }
 }
