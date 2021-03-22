@@ -18,5 +18,5 @@ data class Task(
 ) : Parcelable {
 
     val createdDateFormatted: String
-        get() = DateFormat.getDateInstance().format(created)
+        get() = DateFormat.getDateTimeInstance().format(created)
 }

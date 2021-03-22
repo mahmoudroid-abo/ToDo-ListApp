@@ -10,7 +10,6 @@ import com.mahmoudroid.todolist.data.TaskDao
 import com.mahmoudroid.todolist.ui.ADD_TASK_RESULT_OK
 import com.mahmoudroid.todolist.ui.EDIT_TASK_RESULT_OK
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -27,7 +26,7 @@ class TasksViewModel @ViewModelInject constructor(
 
     val preferencesFlow = preferencesManager.preferencesFlow
 
-    private val taskEventChannel = Channel<TaskEvent>()
+    private val taskEventChannel = Channel<TasksEvent>()
 
     val taskEvent = taskEventChannel.receiveAsFlow()
 
@@ -51,7 +50,7 @@ class TasksViewModel @ViewModelInject constructor(
     }
 
     fun onTaskSelected(task: Task) = viewModelScope.launch {
-        taskEventChannel.send(TaskEvent.NavigateToEditTaskScreen(task))
+        taskEventChannel.send(TasksEvent.NavigateToEditTasksScreen(task))
     }
 
     fun onTaskCheckedChanged(task: Task, isChecked: Boolean) = viewModelScope.launch {
@@ -61,7 +60,7 @@ class TasksViewModel @ViewModelInject constructor(
 
     fun onTaskSwiped(task: Task) = viewModelScope.launch {
         taskDao.delete(task)
-        taskEventChannel.send(TaskEvent.ShowUndoDeleteTaskMessage(task))
+        taskEventChannel.send(TasksEvent.ShowUndoDeleteTasksMessage(task))
     }
 
     fun onUndoDeleteClick(task: Task) = viewModelScope.launch {
@@ -69,7 +68,7 @@ class TasksViewModel @ViewModelInject constructor(
     }
 
     fun onAddNewTaskClick() = viewModelScope.launch {
-        taskEventChannel.send(TaskEvent.NavigateToAddTaskScreen)
+        taskEventChannel.send(TasksEvent.NavigateToAddTasksScreen)
     }
 
     fun onAddEditResult(result: Int) {
@@ -79,16 +78,22 @@ class TasksViewModel @ViewModelInject constructor(
         }
     }
 
-    fun showTaskSavedConfirmationMessage(text: String) = viewModelScope.launch {
-        taskEventChannel.send(TaskEvent.ShowTaskSavedConfirmationMessage(text))
+    private fun showTaskSavedConfirmationMessage(text: String) = viewModelScope.launch {
+        taskEventChannel.send(TasksEvent.ShowTasksSavedConfirmationMessage(text))
     }
 
-    sealed class TaskEvent {
-        object NavigateToAddTaskScreen : TaskEvent()
-        data class NavigateToEditTaskScreen(val task: Task) : TaskEvent()
-        data class ShowUndoDeleteTaskMessage(val task: Task) : TaskEvent()
-        data class ShowTaskSavedConfirmationMessage(val msg: String) : TaskEvent()
+    fun onDeleteAllCompletedClick() = viewModelScope.launch {
+        taskEventChannel.send(TasksEvent.NavigateToDeleteAllCompletedScreen)
+    }
 
+
+    sealed class TasksEvent {
+        object NavigateToAddTasksScreen : TasksEvent()
+        data class NavigateToEditTasksScreen(val task: Task) : TasksEvent()
+        data class ShowUndoDeleteTasksMessage(val task: Task) : TasksEvent()
+        data class ShowTasksSavedConfirmationMessage(val msg: String) : TasksEvent()
+
+        object NavigateToDeleteAllCompletedScreen : TasksEvent()
     }
 }
 

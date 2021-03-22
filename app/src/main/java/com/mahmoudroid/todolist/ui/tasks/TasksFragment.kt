@@ -81,26 +81,31 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.taskEvent.collect { event ->
                 when (event) {
-                    is TasksViewModel.TaskEvent.ShowUndoDeleteTaskMessage -> {
+                    is TasksViewModel.TasksEvent.ShowUndoDeleteTasksMessage -> {
                         Snackbar.make(requireView(), "Task Deleted", Snackbar.LENGTH_LONG)
                             .setAction("UNDO") {
                                 viewModel.onUndoDeleteClick(event.task)
                             }.show()
                     }
-                    is TasksViewModel.TaskEvent.NavigateToAddTaskScreen -> {
+                    is TasksViewModel.TasksEvent.NavigateToAddTasksScreen -> {
                         val action = TasksFragmentDirections
                             .actionTasksFragmentToAddEditTaskFragment(null, "New Task")
 
                         findNavController().navigate(action)
                     }
-                    is TasksViewModel.TaskEvent.NavigateToEditTaskScreen -> {
+                    is TasksViewModel.TasksEvent.NavigateToEditTasksScreen -> {
                         val action = TasksFragmentDirections
                             .actionTasksFragmentToAddEditTaskFragment(event.task, "Edit Task")
 
                         findNavController().navigate(action)
                     }
-                    is TasksViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
+                    is TasksViewModel.TasksEvent.ShowTasksSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
+                    }
+                    TasksViewModel.TasksEvent.NavigateToDeleteAllCompletedScreen -> {
+                        val action =
+                            TasksFragmentDirections.actionGlobalDeleteAllCompletedDialogFragment()
+                        findNavController().navigate(action)
                     }
                 }.exhaustive
             }
@@ -143,6 +148,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.OnItemClic
                 true
             }
             R.id.action_delete_all_completed_tasks -> {
+                viewModel.onDeleteAllCompletedClick()
                 true
             }
             else -> {
