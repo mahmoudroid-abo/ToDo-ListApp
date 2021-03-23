@@ -17,9 +17,7 @@ private const val TAG = "PreferencesManager"
 
 enum class SortOrder { BY_NAME, BY_DATE }
 
-data class FilterPreferences(val sortOrder: SortOrder, val hideCompleted: Boolean) {
-
-}
+data class FilterPreferences(val sortOrder: SortOrder, val hideCompleted: Boolean)
 
 @Singleton
 class PreferencesManager @Inject constructor(@ApplicationContext context: Context) {

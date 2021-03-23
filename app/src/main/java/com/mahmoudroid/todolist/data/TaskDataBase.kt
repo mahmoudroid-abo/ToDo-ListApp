@@ -26,18 +26,13 @@ abstract class TaskDataBase : RoomDatabase() {
             val dao = dataBase.get().taskDao()
 
             applicationScope.launch {
-                dao.insert(Task("First", important = true))
-                dao.insert(Task("Second"))
-                dao.insert(Task("Grammar"))
-                dao.insert(Task("Buy"))
-                dao.insert(Task("Deliver"))
-                dao.insert(Task("A"))
-                dao.insert(Task("English"))
-                dao.insert(Task("Mahmoud,", important = true, completed = true))
-                dao.insert(Task("Study", completed = true))
-                dao.insert(Task("Deutsch", important = true))
-                dao.insert(Task("Ali"))
-                dao.insert(Task("First", completed = true))
+                dao.insert(Task("WorkOut", important = true))
+                dao.insert(Task("Buy Grocery"))
+                dao.insert(Task("Study Grammar"))
+                dao.insert(Task("Learn New Deutsch Words", important = true))
+                dao.insert(Task("Watch Movie"))
+                dao.insert(Task("Teeth brushing", important = true))
+                dao.insert(Task("Study Hilt,", important = true, completed = true))
             }
         }
     }

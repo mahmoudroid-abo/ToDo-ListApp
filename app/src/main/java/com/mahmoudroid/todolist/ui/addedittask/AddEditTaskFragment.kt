@@ -18,8 +18,6 @@ import com.mahmoudroid.todolist.util.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
-private const val TAG = "AddEditTaskFragment"
-
 @AndroidEntryPoint
 class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
     private val viewModel: AddEditTaskViewModel by viewModels()
@@ -61,7 +59,6 @@ class AddEditTaskFragment : Fragment(R.layout.fragment_add_edit_task) {
                             "add_edit_request",
                             bundleOf("add_edit_result" to event.result)
                         )
-
                         findNavController().popBackStack()
                     }
                 }.exhaustive
